@@ -1,0 +1,21 @@
+<h1>Listing songs</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Channel</th>
+      <th>Title</th>
+      <th>Artist</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @songs.each do |song| %>
+      <tr>
+        <td><%= song.channel %></td>
+        <td><%= song.title %></td>
+        <td><%= song.artist %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
