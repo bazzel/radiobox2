@@ -1,1 +1,5 @@
-Song.populate
+begin
+  Song.populate
+rescue SQLite3::SQLException
+
+end
