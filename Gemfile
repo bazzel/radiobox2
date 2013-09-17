@@ -43,3 +43,5 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+
+gem 'rufus-scheduler' # job scheduler for Ruby (at, cron, in and every jobs)

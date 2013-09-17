@@ -1,13 +1,16 @@
 require 'open-uri'
 
 class Song < ActiveRecord::Base
-
   class << self
     def populate
-      (1..6).each { |channel| currently_on(channel)}
+      transaction do
+        (1..6).each { |channel| currently_on(channel)}
+      end
+      clear_active_connections!
+
+      Rufus::Scheduler.new.in('30s') { send(__method__.to_sym) }
     end
 
-    private
     def currently_on(channel)
       enc_uri = URI.escape("http://radiobox2.omroep.nl/track/search.json?q=channel.id:'%s'+AND+startdatetime<NOW+AND+stopdatetime>NOW" % channel)
 
@@ -20,6 +23,7 @@ class Song < ActiveRecord::Base
           song.channel = result["channel"]
           song.artist = songfile["artist"]
           song.title = songfile["title"]
+          song.stopdatetime = result["stopdatetime"]
           song.save
         end
       end

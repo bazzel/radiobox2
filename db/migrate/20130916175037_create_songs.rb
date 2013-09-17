@@ -4,6 +4,7 @@ class CreateSongs < ActiveRecord::Migration
       t.string :channel
       t.string :title
       t.string :artist
+      t.datetime :stopdatetime
 
       t.timestamps
     end

@@ -17,6 +17,7 @@ ActiveRecord::Schema.define(version: 20130916175037) do
     t.string   "channel"
     t.string   "title"
     t.string   "artist"
+    t.datetime "stopdatetime"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
