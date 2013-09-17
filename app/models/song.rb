@@ -1,11 +1,10 @@
 require 'open-uri'
 
-class Song
-  attr_accessor :channel, :title, :artist
+class Song < ActiveRecord::Base
 
   class << self
-    def all
-      (1..6).map { |channel| currently_on(channel)}
+    def populate
+      (1..6).each { |channel| currently_on(channel)}
     end
 
     private
@@ -17,10 +16,11 @@ class Song
         result = json["results"].first
         songfile = result["songfile"]
 
-        new.tap do |song|
+        where(channel: channel).first_or_initialize.tap do |song|
           song.channel = result["channel"]
           song.artist = songfile["artist"]
           song.title = songfile["title"]
+          song.save
         end
       end
 
