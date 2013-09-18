@@ -1,5 +1,5 @@
 # RVM bootstrap
-set :rvm_ruby_string, 'ruby-2.0.0p247@radiobox2'
+set :rvm_ruby_string, 'ruby-2.0.0-p247@radiobox2'
 require "rvm/capistrano"                               # Load RVM's capistrano plugin.
 
 # When using whenever gem:
