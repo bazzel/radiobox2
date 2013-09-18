@@ -14,7 +14,8 @@
 ActiveRecord::Schema.define(version: 20130916175037) do
 
   create_table "songs", force: true do |t|
-    t.string   "channel"
+    t.integer  "song_id"
+    t.integer  "channel"
     t.string   "title"
     t.string   "artist"
     t.datetime "stopdatetime"

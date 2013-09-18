@@ -2,35 +2,27 @@ require 'open-uri'
 
 class Song < ActiveRecord::Base
   class << self
-    def schedule_at
-      first_finished.try(:stopdatetime) || 1.minute.from_now
-    end
-
-    def first_finished
-      where('stopdatetime > ?', Time.now).order('stopdatetime').first
-    end
-
-    def refresh
-      channels = to_refresh.pluck(:channel)
-
+    def populate(channels)
       transaction do
         channels.each { |channel| currently_on(channel)}
       end
       clear_active_connections!
 
-      Rufus::Scheduler.new.at(schedule_at) { send(__method__.to_sym) }
+      Rufus::Scheduler.new.at(schedule_at) { send(__method__.to_sym, to_refresh.pluck(:channel)) }
     end
 
+    def schedule_at
+      first_finished.try(:stopdatetime) || 1.minute.from_now
+    end
+
+    # @return [Song] First song to be finished, could be nil
+    def first_finished
+      where('stopdatetime > ?', Time.now).order('stopdatetime').first
+    end
+
+    # @return [Array<Song>]
     def to_refresh
       where('stopdatetime < ?', schedule_at)
-    end
-
-    def populate
-      transaction do
-        (1..6).each { |channel| currently_on(channel)}
-      end
-      clear_active_connections!
-      refresh
     end
 
     def currently_on(channel)
@@ -42,11 +34,13 @@ class Song < ActiveRecord::Base
         songfile = result["songfile"]
 
         where(channel: channel).first_or_initialize.tap do |song|
-          song.channel = result["channel"]
-          song.artist = songfile["artist"]
-          song.title = songfile["title"]
-          song.stopdatetime = result["stopdatetime"]
-          song.save
+          song.song_id = songfile['id']
+          song.channel = result['channel']
+          song.artist = songfile['artist']
+          song.title = songfile['title']
+          song.stopdatetime = result['stopdatetime']
+
+          song.song_id_changed? && song.save
         end
       end
 
