@@ -2,13 +2,35 @@ require 'open-uri'
 
 class Song < ActiveRecord::Base
   class << self
+    def schedule_at
+      first_finished.try(:stopdatetime) || 1.minute.from_now
+    end
+
+    def first_finished
+      where('stopdatetime > ?', Time.now).order('stopdatetime').first
+    end
+
+    def refresh
+      channels = to_refresh.pluck(:channel)
+
+      transaction do
+        channels.each { |channel| currently_on(channel)}
+      end
+      clear_active_connections!
+
+      Rufus::Scheduler.new.at(schedule_at) { send(__method__.to_sym) }
+    end
+
+    def to_refresh
+      where('stopdatetime < ?', schedule_at)
+    end
+
     def populate
       transaction do
         (1..6).each { |channel| currently_on(channel)}
       end
       clear_active_connections!
-
-      Rufus::Scheduler.new.in('30s') { send(__method__.to_sym) }
+      refresh
     end
 
     def currently_on(channel)
