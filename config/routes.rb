@@ -1,6 +1,6 @@
 Radiobox2::Application.routes.draw do
-  resources :songs do
-    collection { get :foo }
+  resources :songs, only: [:index] do
+    collection { get :stream }
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

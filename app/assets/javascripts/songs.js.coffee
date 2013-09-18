@@ -1,6 +1,8 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
-source = new EventSource('songs/foo')
+source = new EventSource('songs/stream')
 source.addEventListener 'message',  (e) ->
-  $('body').append e.data
+  song = $.parseJSON(e.data)
+  $channels = $('table')
+  $channel = $channels.find("[data-channel=#{song.channel}]")
+
+  $channel.find('[data-attribute=artist]').text song.artist
+  $channel.find('[data-attribute=title]').text song.title
