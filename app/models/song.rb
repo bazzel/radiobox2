@@ -6,9 +6,10 @@ class Song < ActiveRecord::Base
       transaction do
         channels.each { |channel| currently_on(channel)}
       end
-      clear_active_connections!
+      #clear_active_connections!
 
-      Rufus::Scheduler.new.at(schedule_at) { send(__method__.to_sym, to_refresh.pluck(:channel)) }
+      Rufus::Scheduler.new.at(schedule_at, allow_overlapping: false) { send(__method__.to_sym, to_refresh.pluck(:channel)) }
+      ActiveRecord::Base.connection_pool.release_connection
     end
 
     def schedule_at
@@ -43,7 +44,6 @@ class Song < ActiveRecord::Base
           song.song_id_changed? && song.save
         end
       end
-
     end
   end
 end
