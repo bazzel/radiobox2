@@ -20,6 +20,6 @@ test:
 
 production:
   adapter: sqlite3
-  database: db/production.sqlite3
-  pool: 5
+  database: /var/www/radiobox2/shared/db/production.sqlite3
+  pool: 8
   timeout: 5000
