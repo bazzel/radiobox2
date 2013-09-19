@@ -8,8 +8,7 @@ class Song < ActiveRecord::Base
       end
       #clear_active_connections!
 
-      scheduler = Rufus::Scheduler::PlainScheduler.start_new
-      scheduler.at(schedule_at, allow_overlapping: false) { send(__method__.to_sym, to_refresh.pluck(:channel)) }
+      Rufus::Scheduler.new.at(schedule_at, allow_overlapping: false) { send(__method__.to_sym, to_refresh.pluck(:channel)) }
       ActiveRecord::Base.connection_pool.release_connection
     end
 
