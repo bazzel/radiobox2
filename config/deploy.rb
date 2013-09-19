@@ -2,6 +2,7 @@
 set :rvm_ruby_string, 'ruby-2.0.0-p247@radiobox2'
 require 'rvm/capistrano'                               # Load RVM's capistrano plugin.
 require 'puma/capistrano'
+set :puma_config_file, 'config/puma.rb'
 
 # When using whenever gem:
 # set :whenever_command, "bundle exec whenever"
