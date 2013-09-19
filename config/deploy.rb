@@ -35,7 +35,8 @@ set :branch,                'feature-capistrano'
 set :git_enable_submodules, 1
 
 set :passenger_port,        3000
-set :passenger_cmd,         "#{bundle_cmd} exec passenger"
+#set :passenger_cmd,         "#{bundle_cmd} exec passenger"
+set :passenger_cmd,         'bundle exec passenger'
 
 # tasks
 namespace :deploy do
