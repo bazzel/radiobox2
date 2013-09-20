@@ -31,8 +31,7 @@ set :use_sudo,    false
 set :scm, :git
 set :scm_username,          'passenger'
 set :repository,            'git@github.com:bazzel/radiobox2.git'
-#set :branch, 'master'
-set :branch,                'feature-capistrano'
+set :branch,                'master'
 set :git_enable_submodules, 1
 
 # tasks
