@@ -3,16 +3,15 @@ require 'open-uri'
 class Song < ActiveRecord::Base
   class << self
     def populate(channels)
-      logger.info "populate #{channels}"
       transaction do
         channels.each { |channel| currently_on(channel)}
       end
       #clear_active_connections!
 
-      Rufus::Scheduler.new.at(schedule_at, allow_overlapping: false) { send(__method__.to_sym, to_refresh.pluck(:channel)) }
+      scheduler = Rufus::Scheduler.new
+      scheduler.at(schedule_at, allow_overlapping: false) { send(__method__.to_sym, to_refresh.pluck(:channel)) }
+      scheduler.join
       ActiveRecord::Base.connection_pool.release_connection
-    rescue
-      logger.error "ERROR: #{$!}"
     end
 
     def schedule_at
