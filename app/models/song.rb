@@ -9,9 +9,7 @@ class Song < ActiveRecord::Base
       end
       #clear_active_connections!
 
-      run_at = schedule_at
-      logger.info "Schedule again at #{run_at}"
-      delay(run_at: run_at).send(__method__.to_sym, to_refresh.pluck(:channel))
+      delay(run_at: schedule_at).send(__method__.to_sym, to_refresh.pluck(:channel))
       ActiveRecord::Base.connection_pool.release_connection
     end
 
