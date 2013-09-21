@@ -23,7 +23,7 @@ production:
   encoding: utf8
   reconnect: false
   database: radiobox2_production
-  pool: 5
+  pool: 20
   username: root
   password: root
   socket: /var/run/mysqld/mysqld.sock

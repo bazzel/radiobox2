@@ -3,13 +3,15 @@ require 'open-uri'
 class Song < ActiveRecord::Base
   class << self
     def populate(channels = nil)
-      channels ||= pluck(:channel)
+      channels ||= (1..6)
       transaction do
         channels.each { |channel| currently_on(channel)}
       end
       #clear_active_connections!
 
-      delay(run_at: schedule_at).send(__method__.to_sym, to_refresh.pluck(:channel))
+      run_at = schedule_at
+      logger.info "Schedule again at #{run_at}"
+      delay(run_at: run_at).send(__method__.to_sym, to_refresh.pluck(:channel))
       ActiveRecord::Base.connection_pool.release_connection
     end
 
