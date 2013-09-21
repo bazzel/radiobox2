@@ -46,8 +46,10 @@ gem 'rvm-capistrano'
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+gem 'daemons'
+gem 'delayed_job_active_record'
 gem 'haml'
 #gem 'passenger'
 gem 'puma' # a simple, fast, threaded, and highly concurrent HTTP 1.1 server
 gem 'redcarpet'
-gem 'rufus-scheduler' # job scheduler for Ruby (at, cron, in and every jobs)
+#gem 'rufus-scheduler' # job scheduler for Ruby (at, cron, in and every jobs)

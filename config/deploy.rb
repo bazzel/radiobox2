@@ -1,12 +1,11 @@
-# RVM bootstrap
-set :rvm_ruby_string, 'ruby-2.0.0-p247@radiobox2'
 require 'rvm/capistrano'                               # Load RVM's capistrano plugin.
 require 'puma/capistrano'
-set :puma_config_file, 'config/puma.rb'
+require 'delayed/recipes'
 
-# When using whenever gem:
-# set :whenever_command, "bundle exec whenever"
-# require 'whenever/capistrano'
+# RVM bootstrap
+set :rvm_ruby_string,  'ruby-2.0.0-p247@radiobox2'
+set :puma_config_file, 'config/puma.rb'
+set :rails_env,        'production' #added for delayed job
 
 set :rvm_type, :system
 
@@ -31,7 +30,8 @@ set :use_sudo,    false
 set :scm, :git
 set :scm_username,          'passenger'
 set :repository,            'git@github.com:bazzel/radiobox2.git'
-set :branch,                'master'
+#set :branch,                'master'
+set :branch,                'feature-delayed_job'
 set :git_enable_submodules, 1
 
 # tasks
@@ -43,9 +43,9 @@ namespace :deploy do
   task :stop, :roles => :app do
   end
 
-  desc "Restart Application"
+  desc "Initiate first delayed_job"
   task :restart, :roles => :app do
-    #run "touch #{current_path}/tmp/restart.txt"
+    run "cd #{current_path} && bundle exec rails r 'Song.populate'"
   end
 
   desc "Symlink shared resources on each release - not used"
@@ -56,5 +56,8 @@ end
 
 after 'deploy:restart',     'deploy:cleanup'
 after 'deploy:update_code', 'deploy:symlink_shared'
+after 'deploy:stop',        'delayed_job:stop'
+after 'deploy:start',       'delayed_job:start'
+after 'deploy:restart',     'delayed_job:restart'
 
 load 'deploy/assets'

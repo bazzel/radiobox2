@@ -2,14 +2,14 @@ require 'open-uri'
 
 class Song < ActiveRecord::Base
   class << self
-    def populate(channels)
+    def populate(channels = nil)
+      channels ||= pluck(:channel)
       transaction do
         channels.each { |channel| currently_on(channel)}
       end
       #clear_active_connections!
 
-      scheduler = Rufus::Scheduler.new
-      scheduler.at(schedule_at, allow_overlapping: false) { send(__method__.to_sym, to_refresh.pluck(:channel)) }
+      delay(run_at: schedule_at).send(__method__.to_sym, to_refresh.pluck(:channel))
       ActiveRecord::Base.connection_pool.release_connection
     end
 

@@ -41,6 +41,12 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.3)
+    daemons (1.1.9)
+    delayed_job (4.0.0)
+      activesupport (>= 3.0, < 4.1)
+    delayed_job_active_record (4.0.0)
+      activerecord (>= 3.0, < 4.1)
+      delayed_job (>= 3.0, < 4.1)
     erubis (2.7.0)
     execjs (2.0.1)
     haml (4.0.3)
@@ -93,8 +99,6 @@ GEM
       json (~> 1.4)
     redcarpet (3.0.0)
     ref (1.0.5)
-    rufus-scheduler (2.0.24)
-      tzinfo (>= 0.3.22)
     rvm-capistrano (1.5.0)
       capistrano (>= 2.15.4)
     sass (3.2.10)
@@ -138,13 +142,14 @@ PLATFORMS
 DEPENDENCIES
   capistrano
   coffee-rails (~> 4.0.0)
+  daemons
+  delayed_job_active_record
   haml
   jbuilder (~> 1.2)
   jquery-rails
   puma
   rails (= 4.0.0)
   redcarpet
-  rufus-scheduler
   rvm-capistrano
   sass-rails (~> 4.0.0)
   sdoc
