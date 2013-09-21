@@ -14,7 +14,8 @@ class Song < ActiveRecord::Base
     end
 
     def schedule_at
-      first_finished.try(:stopdatetime) || 1.minute.from_now
+      x = first_finished.try(:stopdatetime) || 1.minute.from_now
+      logger.info "schedule_at: #{x}"
     end
 
     # @return [Song] First song to be finished, could be nil
@@ -42,6 +43,7 @@ class Song < ActiveRecord::Base
           song.title = songfile['title']
           song.stopdatetime = result['stopdatetime']
 
+          logger.info "#{song.inspect}, changed: #{song.song_id_changed?}"
           song.song_id_changed? && song.save
         end
       end
