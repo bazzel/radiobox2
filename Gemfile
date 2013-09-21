@@ -49,4 +49,5 @@ gem 'rvm-capistrano'
 gem 'haml'
 #gem 'passenger'
 gem 'puma' # a simple, fast, threaded, and highly concurrent HTTP 1.1 server
+gem 'redcarpet'
 gem 'rufus-scheduler' # job scheduler for Ruby (at, cron, in and every jobs)

@@ -10,7 +10,6 @@ class Song < ActiveRecord::Base
 
       scheduler = Rufus::Scheduler.new
       scheduler.at(schedule_at, allow_overlapping: false) { send(__method__.to_sym, to_refresh.pluck(:channel)) }
-      scheduler.join
       ActiveRecord::Base.connection_pool.release_connection
     end
 

@@ -6,3 +6,6 @@ source.addEventListener 'message',  (e) ->
 
   $channel.find('[data-attribute=artist]').text song.artist
   $channel.find('[data-attribute=title]').text song.title
+
+$ ->
+  $('.about a').attr('target', '_blank')
