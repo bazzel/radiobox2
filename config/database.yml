@@ -19,7 +19,11 @@ test:
   timeout: 5000
 
 production:
-  adapter: sqlite3
-  database: /var/www/radiobox2/shared/db/production.sqlite3
-  pool: 8
-  timeout: 5000
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  database: radiobox2_production
+  pool: 5
+  username: root
+  password: root
+  socket: /var/run/mysqld/mysqld.sock
