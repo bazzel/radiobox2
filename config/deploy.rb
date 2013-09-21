@@ -1,6 +1,9 @@
 require 'rvm/capistrano'                               # Load RVM's capistrano plugin.
 require 'puma/capistrano'
 require 'delayed/recipes'
+# Current version of delayed_job still expects script to be located in script folder
+set :delayed_job_command, 'bundle exec bin/delayed_job'
+
 
 # RVM bootstrap
 set :rvm_ruby_string,  'ruby-2.0.0-p247@radiobox2'
