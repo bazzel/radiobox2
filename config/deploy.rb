@@ -30,8 +30,7 @@ set :use_sudo,    false
 set :scm, :git
 set :scm_username,          'passenger'
 set :repository,            'git@github.com:bazzel/radiobox2.git'
-#set :branch,                'master'
-set :branch,                'feature-delayed_job'
+set :branch,                'master'
 set :git_enable_submodules, 1
 
 # tasks
@@ -45,7 +44,7 @@ namespace :deploy do
 
   desc "Initiate first delayed_job"
   task :restart, :roles => :app do
-    run "cd #{current_path} && RAILS_ENV=#{rails_env} bundle exec rails r 'Song.populate'"
+    run "cd #{current_path} && bundle exec rails r -e #{rails_env} 'Song.populate'"
   end
 
   desc "Symlink shared resources on each release - not used"
