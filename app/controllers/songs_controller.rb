@@ -13,9 +13,10 @@ class SongsController < ApplicationController
 
     while true
       Song.where('updated_at > ?', duration.seconds.ago).each do |song|
-      #Song.where(channel: (1..6).to_a.sample).each do |song|
         response.stream.write "data: #{song.to_json}\n\n"
       end
+      #ActiveRecord::Base.connection_pool.release_connection
+      ActiveRecord::Base.clear_active_connections!
       sleep duration
     end
   rescue IOError
